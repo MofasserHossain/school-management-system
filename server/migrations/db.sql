@@ -128,6 +128,9 @@ create table if not exists grades (
     FOREIGN KEY constraint_fk_grade_course_batch (course_batch_id) REFERENCES course_batches(id) on delete cascade
 );
 
+
+insert into users (first_name, last_name, email, password, role) values ('admin', 'admin', 'admin@gmail.com', '123456', "admin");
+
 -- -- insert data 
 -- insert into departments (name, alias) values ('Computer Science and Engineering', 'CSE');
 -- insert into departments (name, alias) values ('Electrical and Electronics Engineering', 'EEE');
