@@ -20,6 +20,12 @@ const studentCourseApiUrl = "http://localhost:9000/v1/users/course";
 const userApiUrl = "http://localhost:9000/v1/users";
 const courseApiUrl = "http://localhost:9000/v1/course-batches";
 
+// Logout Functionality
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "/projects/client";
+});
+
 // Fetch Users Based on Role
 async function fetchUsers(role) {
   try {

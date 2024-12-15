@@ -13,27 +13,10 @@ const token = localStorage.getItem("token");
 // API Base URL
 const apiUrl = "http://localhost:9000/v1/users";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const user = localStorage.getItem("user");
-
-  const parseUser = JSON.parse(user);
-
-  const decodeToken = atob(token.split(".")[1]);
-  const parseToken = JSON.parse(decodeToken);
-  const role = parseToken?.type;
-
-  console.log(parseUser, role, token, decodeToken, parseToken);
-  if (parseUser.role !== role && token && role) {
-    localStorage.clear();
-    window.location.href = "index.html";
-  }
-  // Logout Functionality
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.clear();
-    window.location.href = "index.html";
-  });
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "/projects/client";
 });
-
 // Fetch Users and Render Table
 async function fetchUsers() {
   try {

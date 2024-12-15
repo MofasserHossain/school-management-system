@@ -2,21 +2,6 @@ const token = localStorage.getItem("token");
 const tableBody = document.querySelector("#studentCourseTable tbody");
 const apiURL = "http://localhost:9000/v1/users/course-user";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const user = localStorage.getItem("user");
-
-  const parseUser = JSON.parse(user);
-
-  const decodeToken = atob(token.split(".")[1]);
-  const parseToken = JSON.parse(decodeToken);
-  const role = parseToken?.type;
-
-  console.log(parseUser, role, token, decodeToken, parseToken);
-  if (parseUser.role !== role && token && role && role !== "student") {
-    localStorage.clear();
-    window.location.href = "index.html";
-  }
-});
 // Logout Functionality
 document.getElementById("logoutBtn").addEventListener("click", () => {
   localStorage.clear();
@@ -47,8 +32,6 @@ const renderTable = (courses) => {
     courses.forEach((course) => {
       const row = document.createElement("tr");
       row.innerHTML = `
-                    <td>${course.student_name}</td>
-                    <td>${course.student_email}</td>
                     <td>${course.course_name}</td>
                     <td>${course.course_credits}</td>
                     <td>${course.semester}</td>

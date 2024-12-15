@@ -16,25 +16,10 @@ const departmentApiUrl = "http://localhost:9000/v1/department";
 const courseApiUrl = "http://localhost:9000/v1/courses";
 const batchApiUrl = "http://localhost:9000/v1/batches";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const user = localStorage.getItem("user");
-  const parseUser = JSON.parse(user);
-  const decodeToken = atob(token.split(".")[1]);
-  const parseToken = JSON.parse(decodeToken);
-  const role = parseToken?.type;
-
-  // console.log(parseUser, role, token, decodeToken, parseToken);
-  if (parseUser.role !== role && token && role) {
-    localStorage.clear();
-    window.location.href = "index.html";
-  }
-  // Logout Functionality
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.clear();
-    window.location.href = "index.html";
-  });
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "/projects/client";
 });
-
 // Fetch and Render Course Batches
 async function fetchCourseBatches() {
   try {

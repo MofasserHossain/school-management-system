@@ -206,9 +206,8 @@ exports.getAllUserCoursesV2 = catchAsync(async (req, res) => {
   const { type } = req.query;
   // console.log({ type });
   const query = `
-      SELECT 
-          CONCAT(u.first_name, ' ', u.last_name) AS student_name,
-          u.email AS student_email,
+      SELECT
+          uc.id,
           c.name AS course_name,
           c.credits AS course_credits,
           cb.term AS semester,
@@ -217,8 +216,6 @@ exports.getAllUserCoursesV2 = catchAsync(async (req, res) => {
           d.alias AS department_name
       FROM 
           user_courses as uc
-      JOIN 
-          users as u ON uc.user_id = u.id
       JOIN 
           course_batches as cb ON uc.course_batch_id = cb.id
       JOIN 
@@ -298,5 +295,34 @@ exports.deleteUserCourse = catchAsync(async (req, res) => {
     if (result.affectedRows === 0)
       return res.status(404).json({ status: "fail", message: "Not found" });
     res.status(200).json({ status: "success", message: "User-Course deleted" });
+  });
+});
+
+exports.getAllUserByCourseBatch = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const query = `
+  SELECT 
+    uc.user_id as user_id,
+    u.first_name as first_name,
+    u.last_name as last_name,
+    u.email as email,
+    u.role as role,
+    uc.type as type,
+    uc.created_at as created_at
+   FROM user_courses as uc
+    JOIN users as u ON uc.user_id = u.id
+    WHERE uc.course_batch_id = ? and uc.type = 'student' order by created_at desc;
+  `;
+
+  executeQuery(query, [id], (err, results) => {
+    console.log(err, results);
+    if (err)
+      return res
+        .status(500)
+        .json({ status: "fail", message: "Internal server error" });
+    res.status(200).json({
+      status: "success",
+      data: results,
+    });
   });
 });

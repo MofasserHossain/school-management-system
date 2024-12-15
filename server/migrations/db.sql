@@ -66,7 +66,6 @@ create table if not exists user_courses (
 );
 
 create table if not exists attendance (
-    id int AUTO_INCREMENT PRIMARY KEY,
     user_id int not null,
     course_batch_id int not null,
     date date not null,
@@ -75,13 +74,15 @@ create table if not exists attendance (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY constraint_fk_attendance_user (user_id) REFERENCES users(id) on delete cascade,
-    FOREIGN KEY constraint_fk_attendance_course_batch (course_batch_id) REFERENCES course_batches(id) on delete cascade
+    FOREIGN KEY constraint_fk_attendance_course_batch (course_batch_id) REFERENCES course_batches(id) on delete cascade,
+    PRIMARY KEY (user_id, course_batch_id, date)
 );
 
 create table if not exists assignments (
     id int AUTO_INCREMENT PRIMARY KEY,
     title varchar(255) not null,
     description varchar(255),
+    teacher_id int not null,
     student_id int not null,
     course_batch_id int not null,
     due_date TIMESTAMP not null,
@@ -89,8 +90,13 @@ create table if not exists assignments (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY constraint_fk_assignment_course_batch (course_batch_id) REFERENCES course_batches(id) on delete cascade,
-    FOREIGN KEY constraint_fk_assignment_student (student_id) REFERENCES users(id) on delete cascade
+    FOREIGN KEY constraint_fk_assignment_student (student_id) REFERENCES users(id) on delete cascade,
+    FOREIGN KEY constraint_fk_assignment_teacher (teacher_id) REFERENCES users(id) on delete cascade
 );
+
+-- ALTER TABLE assignments
+--     ADD teacher_id int not null,
+--     ADD CONSTRAINT constraint_fk_assignment_teacher FOREIGN KEY(teacher_id) REFERENCES users(id) on delete cascade;
 
 create table if not exists submissions (
     id int AUTO_INCREMENT PRIMARY KEY,

@@ -7,28 +7,10 @@ const token = localStorage.getItem("token");
 // API URL
 const apiUrl = "http://localhost:9000/v1/department";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("token");
-  const user = localStorage.getItem("user");
-
-  const parseUser = JSON.parse(user);
-
-  const decodeToken = atob(token.split(".")[1]);
-  const parseToken = JSON.parse(decodeToken);
-  const role = parseToken?.type;
-
-  console.log(parseUser, role, token, decodeToken, parseToken);
-  if (parseUser.role !== role && token && role) {
-    localStorage.clear();
-    window.location.href = "index.html";
-  }
-  // Logout Functionality
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.clear();
-    window.location.href = "index.html";
-  });
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "/projects/client";
 });
-
 // DOM Elements
 const tableBody = document.querySelector("#departmentTable tbody");
 const nameDom = document.getElementById("name");

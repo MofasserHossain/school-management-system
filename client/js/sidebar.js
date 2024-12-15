@@ -57,10 +57,15 @@ function renderSidebar() {
   } else if (role === "teacher") {
     sidebarItems += `
           <a href="course.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>My Courses</a>
+          <a href="attendance.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Attendance</a>
+          <a href="assignment.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Assignment</a>
+          <a href="grade.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Grade</a>
         `;
   } else if (role === "student") {
     sidebarItems += `
           <a href="course.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>My Courses</a>
+          <a href="assignment.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Assignment</a>
+          <a href="grade.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Grade</a>
         `;
   }
 
@@ -71,7 +76,7 @@ function renderSidebar() {
 
   logoutBtn.addEventListener("click", () => {
     localStorage.clear(); // Clear all stored data
-    window.location.href = "/index.html"; // Redirect to login page
+    window.location.href = "/projects/client"; // Redirect to login page
   });
 }
 
