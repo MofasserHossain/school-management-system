@@ -47,10 +47,12 @@ function renderSidebar() {
   // Role-Based Items
   if (role === "admin") {
     sidebarItems += `
-          <a href="user.html" class="nav_link"><i class="bx bx-user"></i>Users</a>
-          <a href="department.html" class="nav_link active"><i class="bx bx-bookmark nav_icon"></i>Department</a>
-          <a href="batch.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Batches</a>
+          <a href="user.html" class="nav_link"><i class="bx bx-user"></i>Users<a>
+          <a href="department.html" class="nav_link active"><i class="bx bx-bookmark nav_icon"></i>Department<a>
+          <a href="batch.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Batches<a>
           <a href="course.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Courses</a>
+          <a href="course-batch.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Course Batch</a>
+          <a href="user-course.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>User Course</a>
         `;
   } else if (role === "teacher") {
     sidebarItems += `
@@ -66,9 +68,10 @@ function renderSidebar() {
 
   // Logout Button Event
   const logoutBtn = document.getElementById("logoutBtn");
+
   logoutBtn.addEventListener("click", () => {
     localStorage.clear(); // Clear all stored data
-    window.location.href = "index.html"; // Redirect to login page
+    window.location.href = "/index.html"; // Redirect to login page
   });
 }
 

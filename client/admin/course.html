@@ -14,41 +14,45 @@
       href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles/sidebar.css" />
-    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="../styles/sidebar.css" />
+    <link rel="stylesheet" href="../style.css" />
   </head>
   <body id="body-pd">
     <header class="header" id="header">
       <div class="header_toggle">
         <i class="bx bx-menu" id="header-toggle"></i>
       </div>
+      <!-- <div class="header_img">
+        <img src="https://i.imgur.com/hczKIze.jpg" alt="" />
+      </div> -->
     </header>
     <div class="l-navbar" id="nav-bar">
       <nav class="nav">
         <div>
           <a href="#" class="nav_logo">
             <i class="bx bx-layer nav_logo-icon"></i>
-            <span class="nav_logo-name">School Management</span>
+            <span class="nav_logo-name">E-School</span>
           </a>
           <div class="nav_list" id="sidebar"></div>
         </div>
-        <a href="#" class="nav_link">
+        <a href="#" class="nav_link" id="logoutBtn">
           <i class="bx bx-log-out nav_icon"></i>
           <span class="nav_name">SignOut</span>
         </a>
       </nav>
     </div>
     <div class="height-100 main">
-      <h1 class="text-center mb-4 pt-4">Department</h1>
+      <h1 class="text-center mb-4 pt-4">Course Management</h1>
       <div class="row">
         <!-- Left Column: Table -->
         <div class="col-md-7 col-12">
-          <h3>Department List</h3>
-          <table class="table table-striped" id="departmentTable">
+          <h3>Course List</h3>
+          <table class="table table-striped" id="courseTable">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Alias</th>
+                <th>Course Name</th>
+                <th>Credits</th>
+                <th>Department</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -56,47 +60,66 @@
           </table>
         </div>
 
+        <!-- Right Column: Form -->
         <div class="col-md-5 col-12">
-          <h3>Add/Update Department</h3>
-          <form id="departmentForm">
-            <input type="hidden" id="editId" />
+          <h3>Add/Update Course</h3>
+          <form id="courseForm">
+            <input type="hidden" id="editCourseId" />
             <div class="mb-3">
-              <label for="name" class="form-label">Name</label>
+              <label for="courseName" class="form-label">Course Name</label>
               <input
                 type="text"
                 class="form-control"
-                id="name"
-                placeholder="Enter department name"
+                id="courseName"
+                placeholder="Enter course name"
                 required
               />
             </div>
             <div class="mb-3">
-              <label for="alias" class="form-label">Alias</label>
+              <label for="courseCredits" class="form-label">Credits</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
-                id="alias"
-                placeholder="Enter department alias"
+                id="courseCredits"
+                max="4"
+                min="1"
+                placeholder="Enter course credits"
                 required
               />
+            </div>
+            <div class="mb-3">
+              <label for="departmentSelect" class="form-label"
+                >Department</label
+              >
+              <select class="form-select" id="departmentSelect" required>
+                <option value="" disabled selected>Select department</option>
+              </select>
             </div>
             <button
               type="submit"
               class="btn btn-primary bg-primary"
-              id="submitBtn"
+              id="courseSubmitBtn"
             >
               Add
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger bg-danger d-none"
+              id="batchCancelBtn"
+            >
+              Cancel
             </button>
           </form>
         </div>
       </div>
     </div>
+
     <!-- <div class="container mt-5"></div> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Bootstrap Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
-    <script src="js/sidebar.js"></script>
-    <script src="js/department.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/admin/course.js"></script>
   </body>
 </html>

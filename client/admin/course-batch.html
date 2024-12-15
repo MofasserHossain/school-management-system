@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Department Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Boxicons CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles/sidebar.css" />
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body id="body-pd">
+    <header class="header" id="header">
+      <div class="header_toggle">
+        <i class="bx bx-menu" id="header-toggle"></i>
+      </div>
+      <!-- <div class="header_img">
+        <img src="https://i.imgur.com/hczKIze.jpg" alt="" />
+      </div> -->
+    </header>
+    <div class="l-navbar" id="nav-bar">
+      <nav class="nav">
+        <div>
+          <a href="#" class="nav_logo">
+            <i class="bx bx-layer nav_logo-icon"></i>
+            <span class="nav_logo-name">E-School</span>
+          </a>
+          <div class="nav_list" id="sidebar"></div>
+        </div>
+        <a href="#" class="nav_link" id="logoutBtn">
+          <i class="bx bx-log-out nav_icon"></i>
+          <span class="nav_name">SignOut</span>
+        </a>
+      </nav>
+    </div>
+    <div class="height-100 main">
+      <h1 class="text-center mb-4 pt-4">Course Batch Management</h1>
+      <div class="row">
+        <!-- Left Column: Table -->
+        <div class="col-md-8 col-12">
+          <h3>Course Batch List</h3>
+          <table class="table table-striped" id="courseBatchTable">
+            <thead>
+              <tr>
+                <th>Term</th>
+                <th>Year</th>
+                <th>Section</th>
+                <th>Course</th>
+                <th>Batch</th>
+                <th>Department</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <!-- Right Column: Form -->
+        <div class="col-md-4 col-12">
+          <h3>Add/Update Course Batch</h3>
+          <form id="courseBatchForm">
+            <input type="hidden" id="editCourseBatchId" />
+            <div class="mb-3">
+              <label for="termSelect" class="form-label">Term</label>
+              <select class="form-select" id="termSelect" required>
+                <option value="" disabled selected>Select term</option>
+                <option value="fall">Fall</option>
+                <option value="spring">Spring</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="yearInput" class="form-label">Year</label>
+              <input
+                type="number"
+                class="form-control"
+                id="yearInput"
+                placeholder="Enter year"
+                pattern="202[0-9]|203[0-9]"
+                title="Enter a year between 2020 and 2039"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="sectionSelect" class="form-label">Section</label>
+              <select class="form-select" id="sectionSelect" required>
+                <option value="" disabled selected>Select section</option>
+                <option value="D1">D1</option>
+                <option value="D2">D2</option>
+                <option value="D3">D3</option>
+                <option value="D4">D4</option>
+                <option value="D5">D5</option>
+                <option value="D6">D6</option>
+                <option value="D7">D7</option>
+                <option value="D8">D8</option>
+                <option value="D9">D9</option>
+                <option value="D10">D10</option>
+                <option value="E1">E1</option>
+                <option value="E2">E2</option>
+                <option value="E3">E3</option>
+                <option value="E4">E4</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="departmentSelect" class="form-label"
+                >Department</label
+              >
+              <select class="form-select" id="departmentSelect" required>
+                <option value="" disabled selected>Select department</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="courseSelect" class="form-label">Course</label>
+              <select class="form-select" id="courseSelect" required>
+                <option value="" disabled selected>Select course</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="batchSelect" class="form-label">Batch</label>
+              <select class="form-select" id="batchSelect" required>
+                <option value="" disabled selected>Select batch</option>
+              </select>
+            </div>
+            <button
+              type="submit"
+              class="btn btn-primary bg-primary"
+              id="courseBatchSubmitBtn"
+            >
+              Add
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="container mt-5"></div> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/admin/course-batch.js"></script>
+  </body>
+</html>

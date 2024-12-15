@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log(parseUser.role, role, token, decodeToken, parseToken);
 
   if (parseUser.role === role && token && role) {
-    window.location.href = "dashboard.html";
+    window.location.href = "/admin/dashboard.html";
   }
 });
 
@@ -61,9 +61,11 @@ button.addEventListener("submit", async function (e) {
       localStorage.setItem("user", JSON.stringify(data.user));
       // Redirect to dashboard
       if (data.user.role === "admin") {
-        window.location.href = "department.html";
+        window.location.href = "admin/department.html";
+      } else if (data.user.role === "teacher") {
+        window.location.href = "teacher/dashboard.html";
       } else {
-        window.location.href = "dashboard.html";
+        window.location.href = "student/dashboard.html";
       }
     } else {
       // Show error alert

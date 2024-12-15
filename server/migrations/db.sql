@@ -54,8 +54,9 @@ create table if not exists course_batches (
     FOREIGN KEY constraint_fk_course_batch_department_id (department_id) REFERENCES departments(id) on delete cascade
 );
 
-create table if not exists student_courses (
+create table if not exists user_courses (
     id int AUTO_INCREMENT PRIMARY KEY,
+    type ENUM('student', 'teacher'),
     user_id int not null,
     course_batch_id int not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -63,17 +64,6 @@ create table if not exists student_courses (
     FOREIGN KEY constraint_fk_student_course_user (user_id) REFERENCES users(id) on delete cascade,
     FOREIGN KEY constraint_fk_student_course_batch (course_batch_id) REFERENCES course_batches(id) on delete cascade
 );
-
-create table if not exists teacher_courses (
-    id int AUTO_INCREMENT PRIMARY KEY,
-    user_id int not null,
-    course_batch_id int not null,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY constraint_fk_teacher_course_user (user_id) REFERENCES users(id),
-    FOREIGN KEY constraint_fk_teacher_course_batch (course_batch_id) REFERENCES course_batches(id)
-);
-
 
 create table if not exists attendance (
     id int AUTO_INCREMENT PRIMARY KEY,

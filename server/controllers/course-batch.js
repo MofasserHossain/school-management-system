@@ -1,20 +1,18 @@
 const { executeQuery } = require("../config/db-function");
 const catchAsync = require("../utils/cacheAsync");
 
-exports.createCourse = catchAsync(async (req, res) => {
-  // name varchar(255) not null,
-  // credits int not null,
-  // department_id int not null,
-  const { name, credits, department_id } = req.body;
-  if (!name || !credits || !department_id) {
+exports.createCourseBatches = catchAsync(async (req, res) => {
+  const { term, year, section, department_id, course_id, batch_id } = req.body;
+
+  if (!term || !year || !section || !department_id || !course_id || !batch_id) {
     return res.status(400).json({
       status: "fail",
       message: "Please provide all required fields",
     });
   }
 
-  const query = `INSERT INTO courses (name, credits, department_id) VALUES (?, ?, ?)`;
-  const values = [name, credits, department_id];
+  const query = `INSERT INTO course_batches (term, year, section, department_id, course_id, batch_id) VALUES (?, ?, ?, ?, ?, ?)`;
+  const values = [term, year, section, department_id, course_id, batch_id];
 
   executeQuery(query, values, (error, results) => {
     if (error) {
@@ -26,13 +24,30 @@ exports.createCourse = catchAsync(async (req, res) => {
 
     res.status(201).json({
       status: "success",
-      message: "Course created successfully",
+      message: "Course batch created successfully",
     });
   });
 });
 
-exports.getAllCourse = catchAsync(async (req, res) => {
-  const query = `SELECT c.id as id, c.name as name, c.credits as credits, d.alias as department_name, c.created_at as created_at, c.updated_at as updated_at  FROM courses as c join departments d where c.department_id = d.id order by c.created_at desc`;
+exports.getAllCourseBatches = catchAsync(async (req, res) => {
+  const query = `
+    SELECT 
+      cb.id AS id, 
+      cb.term AS term, 
+      cb.year AS year, 
+      cb.section AS section, 
+      d.name AS department_name, 
+      d.alias AS department_alias, 
+      c.name AS course_name, 
+      b.name AS batch_name, 
+      cb.created_at AS created_at, 
+      cb.updated_at AS updated_at
+    FROM course_batches cb
+    JOIN departments d ON cb.department_id = d.id
+    JOIN courses c ON cb.course_id = c.id
+    JOIN batches b ON cb.batch_id = b.id
+    ORDER BY cb.created_at DESC;
+  `;
 
   executeQuery(query, [], (error, results) => {
     if (error) {
@@ -49,16 +64,17 @@ exports.getAllCourse = catchAsync(async (req, res) => {
   });
 });
 
-exports.getCourse = catchAsync(async (req, res) => {
+exports.getCourseBatches = catchAsync(async (req, res) => {
   const { id } = req.params;
+
   if (!id) {
     return res.status(400).json({
       status: "fail",
-      message: "Please provide course id",
+      message: "Please provide course batch id",
     });
   }
 
-  const query = `SELECT * FROM courses WHERE id = ?`;
+  const query = `SELECT * FROM course_batches WHERE id = ?`;
   const values = [id];
 
   executeQuery(query, values, (error, results) => {
@@ -72,7 +88,7 @@ exports.getCourse = catchAsync(async (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({
         status: "fail",
-        message: "Course not found",
+        message: "Course batch not found",
       });
     }
 
@@ -83,18 +99,31 @@ exports.getCourse = catchAsync(async (req, res) => {
   });
 });
 
-exports.updateCourse = catchAsync(async (req, res) => {
+exports.updateCourseBatches = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { name, credits, department_id } = req.body;
-  if (!id || !name || !credits || !department_id) {
+  const { term, year, section, department_id, course_id, batch_id } = req.body;
+
+  if (
+    !id ||
+    !term ||
+    !year ||
+    !section ||
+    !department_id ||
+    !course_id ||
+    !batch_id
+  ) {
     return res.status(400).json({
       status: "fail",
       message: "Please provide all required fields",
     });
   }
 
-  const query = `UPDATE courses SET name = ?, credits = ?, department_id = ? WHERE id = ?`;
-  const values = [name, credits, department_id, id];
+  const query = `
+    UPDATE course_batches 
+    SET term = ?, year = ?, section = ?, department_id = ?, course_id = ?, batch_id = ?
+    WHERE id = ?
+  `;
+  const values = [term, year, section, department_id, course_id, batch_id, id];
 
   executeQuery(query, values, (error, results) => {
     if (error) {
@@ -106,21 +135,22 @@ exports.updateCourse = catchAsync(async (req, res) => {
 
     res.status(200).json({
       status: "success",
-      message: "Course updated successfully",
+      message: "Course batch updated successfully",
     });
   });
 });
 
-exports.deleteCourse = catchAsync(async (req, res) => {
+exports.deleteCourseBatches = catchAsync(async (req, res) => {
   const { id } = req.params;
+
   if (!id) {
     return res.status(400).json({
       status: "fail",
-      message: "Please provide course id",
+      message: "Please provide course batch id",
     });
   }
 
-  const query = `DELETE FROM courses WHERE id = ?`;
+  const query = `DELETE FROM course_batches WHERE id = ?`;
   const values = [id];
 
   executeQuery(query, values, (error, results) => {
@@ -134,13 +164,13 @@ exports.deleteCourse = catchAsync(async (req, res) => {
     if (results.affectedRows === 0) {
       return res.status(404).json({
         status: "fail",
-        message: "Course not found",
+        message: "Course batch not found",
       });
     }
 
     res.status(200).json({
       status: "success",
-      message: "Course deleted successfully",
+      message: "Course batch deleted successfully",
     });
   });
 });
