@@ -1,37 +1,48 @@
 const { executeQuery } = require("../config/db-function");
+const catchAsync = require("../utils/cacheAsync");
+const { encryptPassword } = require("../utils/password");
 
-exports.createCourse = catchAsync(async (req, res) => {
-  // name varchar(255) not null,
-  // credits int not null,
-  // department_id int not null,
-  const { name, credits, department_id } = req.body;
-  if (!name || !credits || !department_id) {
+exports.createUser = catchAsync(async (req, res) => {
+  const { first_name, last_name, email, password, role } = req.body;
+  if (!first_name || !last_name || !email || !password || !role) {
     return res.status(400).json({
       status: "fail",
       message: "Please provide all required fields",
     });
   }
 
-  const query = `INSERT INTO courses (name, credits, department_id) VALUES (?, ?, ?)`;
-  const values = [name, credits, department_id];
+  if (role !== "student" && role !== "teacher") {
+    return res.status(400).json({
+      status: "fail",
+      message: "Invalid role",
+    });
+  }
+
+  const query = `INSERT INTO users (first_name, last_name, email, password, role) VALUES (?, ?, ?, ?, ?)`;
+
+  const hashPassword = await encryptPassword(password);
+  const values = [first_name, last_name, email, hashPassword, role];
 
   executeQuery(query, values, (error, results) => {
+    console.log(results, error?.message);
     if (error) {
       return res.status(500).json({
         status: "fail",
-        message: "Internal server error",
+        message: error?.message || "Internal server error",
       });
     }
 
+    // console.log(results);
+
     res.status(201).json({
       status: "success",
-      message: "Course created successfully",
+      message: "User created successfully",
     });
   });
 });
 
-exports.getAllCourse = catchAsync(async (req, res) => {
-  const query = `SELECT * FROM courses order by created_at desc`;
+exports.getAllUser = catchAsync(async (req, res) => {
+  const query = `SELECT * FROM users where role != 'admin' order by created_at desc`;
 
   executeQuery(query, [], (error, results) => {
     if (error) {
@@ -48,16 +59,16 @@ exports.getAllCourse = catchAsync(async (req, res) => {
   });
 });
 
-exports.getCourse = catchAsync(async (req, res) => {
+exports.getUser = catchAsync(async (req, res) => {
   const { id } = req.params;
   if (!id) {
     return res.status(400).json({
       status: "fail",
-      message: "Please provide course id",
+      message: "Please provide user id",
     });
   }
 
-  const query = `SELECT * FROM courses WHERE id = ?`;
+  const query = `SELECT * FROM users WHERE id = ?`;
   const values = [id];
 
   executeQuery(query, values, (error, results) => {
@@ -65,13 +76,6 @@ exports.getCourse = catchAsync(async (req, res) => {
       return res.status(500).json({
         status: "fail",
         message: "Internal server error",
-      });
-    }
-
-    if (results.length === 0) {
-      return res.status(404).json({
-        status: "fail",
-        message: "Course not found",
       });
     }
 
@@ -82,18 +86,18 @@ exports.getCourse = catchAsync(async (req, res) => {
   });
 });
 
-exports.updateCourse = catchAsync(async (req, res) => {
+exports.updateUser = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { name, credits, department_id } = req.body;
-  if (!id || !name || !credits || !department_id) {
+  const { first_name, last_name, email, role } = req.body;
+  if (!id) {
     return res.status(400).json({
       status: "fail",
-      message: "Please provide all required fields",
+      message: "Please provide user id",
     });
   }
 
-  const query = `UPDATE courses SET name = ?, credits = ?, department_id = ? WHERE id = ?`;
-  const values = [name, credits, department_id, id];
+  const query = `UPDATE users SET first_name = ?, last_name = ?, email = ?, role = ? WHERE id = ?`;
+  const values = [first_name, last_name, email, role, id];
 
   executeQuery(query, values, (error, results) => {
     if (error) {
@@ -105,21 +109,21 @@ exports.updateCourse = catchAsync(async (req, res) => {
 
     res.status(200).json({
       status: "success",
-      message: "Course updated successfully",
+      message: "User updated successfully",
     });
   });
 });
 
-exports.deleteCourse = catchAsync(async (req, res) => {
+exports.deleteUser = catchAsync(async (req, res) => {
   const { id } = req.params;
   if (!id) {
     return res.status(400).json({
       status: "fail",
-      message: "Please provide course id",
+      message: "Please provide user id",
     });
   }
 
-  const query = `DELETE FROM courses WHERE id = ?`;
+  const query = `DELETE FROM users WHERE id = ?`;
   const values = [id];
 
   executeQuery(query, values, (error, results) => {
@@ -130,16 +134,9 @@ exports.deleteCourse = catchAsync(async (req, res) => {
       });
     }
 
-    if (results.affectedRows === 0) {
-      return res.status(404).json({
-        status: "fail",
-        message: "Course not found",
-      });
-    }
-
     res.status(200).json({
       status: "success",
-      message: "Course deleted successfully",
+      message: "User deleted successfully",
     });
   });
 });

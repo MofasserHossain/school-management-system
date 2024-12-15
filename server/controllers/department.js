@@ -1,6 +1,7 @@
 // name varchar(255) not null,
 
 const { executeQuery } = require("../config/db-function");
+const catchAsync = require("../utils/cacheAsync");
 
 // alias varchar(20) not null,
 exports.createDepartment = catchAsync(async (req, res) => {
@@ -31,9 +32,10 @@ exports.createDepartment = catchAsync(async (req, res) => {
 });
 
 exports.getAllDepartment = catchAsync(async (req, res) => {
-  const query = `SELECT * FROM departments`;
+  const query = `SELECT * FROM departments order by created_at desc`;
 
   executeQuery(query, [], (error, results) => {
+    console.log(results, error?.message);
     if (error) {
       return res.status(500).json({
         status: "fail",

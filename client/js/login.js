@@ -60,7 +60,11 @@ button.addEventListener("submit", async function (e) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       // Redirect to dashboard
-      window.location.href = "dashboard.html";
+      if (data.user.role === "admin") {
+        window.location.href = "department.html";
+      } else {
+        window.location.href = "dashboard.html";
+      }
     } else {
       // Show error alert
       document.getElementById("errorAlert").innerText =

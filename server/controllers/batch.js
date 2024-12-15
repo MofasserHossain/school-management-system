@@ -1,19 +1,20 @@
-const { executeQuery } = require("../config/db-function");
+// name varchar(255) not null,
 
-exports.createCourse = catchAsync(async (req, res) => {
-  // name varchar(255) not null,
-  // credits int not null,
-  // department_id int not null,
-  const { name, credits, department_id } = req.body;
-  if (!name || !credits || !department_id) {
+const { executeQuery } = require("../config/db-function");
+const catchAsync = require("../utils/cacheAsync");
+
+// alias varchar(20) not null,
+exports.createBatch = catchAsync(async (req, res) => {
+  const { name } = req.body;
+  if (!name) {
     return res.status(400).json({
       status: "fail",
       message: "Please provide all required fields",
     });
   }
 
-  const query = `INSERT INTO courses (name, credits, department_id) VALUES (?, ?, ?)`;
-  const values = [name, credits, department_id];
+  const query = `INSERT INTO batches (name) VALUES (?)`;
+  const values = [name];
 
   executeQuery(query, values, (error, results) => {
     if (error) {
@@ -25,15 +26,16 @@ exports.createCourse = catchAsync(async (req, res) => {
 
     res.status(201).json({
       status: "success",
-      message: "Course created successfully",
+      message: "Batch created successfully",
     });
   });
 });
 
-exports.getAllCourse = catchAsync(async (req, res) => {
-  const query = `SELECT * FROM courses order by created_at desc`;
+exports.getAllBatch = catchAsync(async (req, res) => {
+  const query = `SELECT * FROM batches order by created_at desc`;
 
   executeQuery(query, [], (error, results) => {
+    console.log(results, error?.message);
     if (error) {
       return res.status(500).json({
         status: "fail",
@@ -48,16 +50,16 @@ exports.getAllCourse = catchAsync(async (req, res) => {
   });
 });
 
-exports.getCourse = catchAsync(async (req, res) => {
+exports.getBatch = catchAsync(async (req, res) => {
   const { id } = req.params;
   if (!id) {
     return res.status(400).json({
       status: "fail",
-      message: "Please provide course id",
+      message: "Please provide department id",
     });
   }
 
-  const query = `SELECT * FROM courses WHERE id = ?`;
+  const query = `SELECT * FROM batches WHERE id = ?`;
   const values = [id];
 
   executeQuery(query, values, (error, results) => {
@@ -71,7 +73,7 @@ exports.getCourse = catchAsync(async (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({
         status: "fail",
-        message: "Course not found",
+        message: "Batch not found",
       });
     }
 
@@ -82,18 +84,18 @@ exports.getCourse = catchAsync(async (req, res) => {
   });
 });
 
-exports.updateCourse = catchAsync(async (req, res) => {
+exports.updateBatch = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { name, credits, department_id } = req.body;
-  if (!id || !name || !credits || !department_id) {
+  const { name } = req.body;
+  if (!id || !name) {
     return res.status(400).json({
       status: "fail",
       message: "Please provide all required fields",
     });
   }
 
-  const query = `UPDATE courses SET name = ?, credits = ?, department_id = ? WHERE id = ?`;
-  const values = [name, credits, department_id, id];
+  const query = `UPDATE batches SET name = ? WHERE id = ?`;
+  const values = [name, id];
 
   executeQuery(query, values, (error, results) => {
     if (error) {
@@ -103,23 +105,30 @@ exports.updateCourse = catchAsync(async (req, res) => {
       });
     }
 
+    if (results.affectedRows === 0) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Batch not found",
+      });
+    }
+
     res.status(200).json({
       status: "success",
-      message: "Course updated successfully",
+      message: "Batch updated successfully",
     });
   });
 });
 
-exports.deleteCourse = catchAsync(async (req, res) => {
+exports.deleteBatch = catchAsync(async (req, res) => {
   const { id } = req.params;
   if (!id) {
     return res.status(400).json({
       status: "fail",
-      message: "Please provide course id",
+      message: "Please provide department id",
     });
   }
 
-  const query = `DELETE FROM courses WHERE id = ?`;
+  const query = `DELETE FROM batches WHERE id = ?`;
   const values = [id];
 
   executeQuery(query, values, (error, results) => {
@@ -133,13 +142,13 @@ exports.deleteCourse = catchAsync(async (req, res) => {
     if (results.affectedRows === 0) {
       return res.status(404).json({
         status: "fail",
-        message: "Course not found",
+        message: "Batch not found",
       });
     }
 
     res.status(200).json({
       status: "success",
-      message: "Course deleted successfully",
+      message: "Batch deleted successfully",
     });
   });
 });
