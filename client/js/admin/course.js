@@ -4,7 +4,7 @@ const courseCreditsInput = document.getElementById("courseCredits");
 const departmentSelect = document.getElementById("departmentSelect");
 const courseSubmitBtn = document.getElementById("courseSubmitBtn");
 const editCourseIdInput = document.getElementById("editCourseId");
-const token = localStorage.getItem("token");
+const tokeVal = localStorage.getItem("token");
 const hiddenButton = document.getElementById("batchCancelBtn");
 
 // API Base URLs
@@ -23,7 +23,7 @@ async function fetchCourses() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
     });
     if (response.ok) {
@@ -45,7 +45,7 @@ async function fetchDepartments() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
     });
     if (response.ok) {
@@ -116,7 +116,7 @@ async function saveCourse(event) {
       method,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
       body: JSON.stringify(courseData),
     });
@@ -139,7 +139,7 @@ async function handleCourseEdit(event) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
     });
     if (response.ok) {

@@ -1,5 +1,5 @@
 // Get the token from localStorage
-const token = localStorage.getItem("token");
+const tokeVal = localStorage.getItem("token");
 // if (!token) {
 //   window.location.href = "index.html"; // Redirect to login if no token exists
 // }
@@ -27,7 +27,7 @@ async function fetchDepartments() {
     const response = await fetch(apiUrl, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
         "Content-Type": "application/json",
       },
     });
@@ -71,7 +71,7 @@ formDom.addEventListener("submit", async function (e) {
     await fetch(endpoint, {
       method: method,
       headers: {
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
         "Content-Type": "application/json",
       },
       body: JSON.stringify(requestBody),
@@ -94,7 +94,7 @@ async function deleteDepartment(id) {
       await fetch(`${apiUrl}/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${token}`, // Include the token
+          Authorization: `Bearer ${tokeVal}`, // Include the token
         },
       });
       fetchDepartments(); // Refresh table

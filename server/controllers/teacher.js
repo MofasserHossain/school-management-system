@@ -61,7 +61,7 @@ VALUES ?`;
   executeQuery(query, values, (error, results) => {
     console.log("error", error);
     if (error) {
-      return res.status(500).json({
+      return res.status(400).json({
         status: "fail",
         message: error?.message || "Internal server error",
       });
@@ -318,6 +318,85 @@ exports.deleteTeacherAssignment = catchAsync(async (req, res) => {
     res.status(200).json({
       status: "success",
       message: "Teacher assignment deleted successfully",
+    });
+  });
+});
+
+exports.getSubmissions = catchAsync(async (req, res) => {
+  const assignmentId = req.params.assignmentId;
+  const { course_batch_id } = req.query;
+  const query = `
+    SELECT s.id as submission_id, s.student_id, s.assignment_id, s.link, s.is_late, s.created_at as submission_date, u.first_name, u.last_name, u.email
+    FROM submissions s
+    JOIN users u ON s.student_id = u.id
+    WHERE s.assignment_id = ? AND s.course_batch_id = ?
+  `;
+
+  executeQuery(query, [assignmentId, course_batch_id], (error, results) => {
+    console.log("error", error);
+    if (error) {
+      return res.status(500).json({
+        status: "fail",
+        message: "Internal server error",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: results,
+    });
+  });
+});
+
+exports.publishGrade = catchAsync(async (req, res) => {
+  const { grades } = req.body;
+
+  if (grades.length === 0) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Please provide all required fields",
+    });
+  }
+
+  const checkAllKey = grades.every((data) => {
+    return (
+      data.hasOwnProperty("user_id") &&
+      data.hasOwnProperty("course_batch_id") &&
+      data.hasOwnProperty("grade") &&
+      data.hasOwnProperty("mark")
+    );
+  });
+
+  if (!checkAllKey) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Please provide all required fields",
+    });
+  }
+
+  const query = `INSERT INTO grades (student_id, course_batch_id, grade, mark) VALUES ?`;
+
+  const values = [
+    grades.map((data) => [
+      data.user_id,
+      data.course_batch_id,
+      data.grade,
+      data.mark,
+    ]),
+  ];
+
+  executeQuery(query, values, (error, results) => {
+    console.log("error", error);
+    if (error) {
+      return res.status(500).json({
+        status: "fail",
+        message: "Internal server error",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Grade published successfully",
     });
   });
 });

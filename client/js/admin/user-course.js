@@ -13,7 +13,7 @@ const studentCourseCancelBtn = document.getElementById(
 );
 const roleInput = document.getElementById("roleSelect");
 
-const token = localStorage.getItem("token");
+const tokeVal = localStorage.getItem("token");
 
 // API Base URLs
 const studentCourseApiUrl = "http://localhost:9000/v1/users/course";
@@ -33,7 +33,7 @@ async function fetchUsers(role) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${tokeVal}`,
       },
     });
 
@@ -69,7 +69,7 @@ async function fetchStudentCourses() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
     });
     if (response.ok) {
@@ -91,7 +91,7 @@ async function fetchDropdownData() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
     };
     const [courses] = await Promise.all([
@@ -189,7 +189,7 @@ async function handleStudentCourseEdit(event) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
     });
     if (response.ok) {

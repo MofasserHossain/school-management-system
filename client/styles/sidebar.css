@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 :root {
   --header-height: 3rem;
-  --nav-width: 68px;
+  --nav-widthV2: 68px;
   --first-color: #4723d9;
   --first-color-light: #afa5d9;
   --white-color: #f7f6fb;
@@ -62,7 +62,7 @@ a {
   position: fixed;
   top: 0;
   left: -30%;
-  width: var(--nav-width);
+  width: var(--nav-widthV2);
   height: 100vh;
   background-color: var(--first-color);
   padding: 0.5rem 1rem 0 0;
@@ -107,11 +107,11 @@ a {
 .nav_icon {
   font-size: 1.25rem;
 }
-.show {
+.show_nav {
   left: 0;
 }
 .body-pd {
-  padding-left: calc(var(--nav-width) + 1rem);
+  padding-left: calc(var(--nav-widthV2) + 1rem);
 }
 .active {
   color: var(--white-color);
@@ -135,11 +135,11 @@ a {
 @media screen and (min-width: 768px) {
   body {
     margin: calc(var(--header-height) + 1rem) 0 0 0;
-    padding-left: calc(var(--nav-width) + 2rem);
+    padding-left: calc(var(--nav-widthV2) + 2rem);
   }
   .header {
     height: calc(var(--header-height) + 1rem);
-    padding: 0 2rem 0 calc(var(--nav-width) + 2rem);
+    padding: 0 2rem 0 calc(var(--nav-widthV2) + 2rem);
   }
   .header_img {
     width: 40px;
@@ -152,10 +152,10 @@ a {
     left: 0;
     padding: 1rem 1rem 0 0;
   }
-  .show {
-    width: calc(var(--nav-width) + 156px);
+  .show_nav {
+    width: calc(var(--nav-widthV2) + 156px);
   }
   .body-pd {
-    padding-left: calc(var(--nav-width) + 188px);
+    padding-left: calc(var(--nav-widthV2) + 188px);
   }
 }

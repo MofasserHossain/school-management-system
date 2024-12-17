@@ -13,7 +13,7 @@ const showNavbar = (toggleId, navId, bodyId, headerId) => {
   if (toggle && nav && bodypd && headerpd) {
     toggle.addEventListener("click", () => {
       // show navbar
-      nav.classList.toggle("show");
+      nav.classList.toggle("show_nav");
       //   nav_logo.classList.toggle("bx-x");
       // change icon
       toggle.classList.toggle("bx-x");
@@ -56,14 +56,14 @@ function renderSidebar() {
         `;
   } else if (role === "teacher") {
     sidebarItems += `
-          <a href="course.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>My Courses</a>
+          <a href="dashboard.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>My Courses</a>
           <a href="attendance.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Attendance</a>
           <a href="assignment.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Assignment</a>
           <a href="grade.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Grade</a>
         `;
   } else if (role === "student") {
     sidebarItems += `
-          <a href="course.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>My Courses</a>
+          <a href="dashboard.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>My Courses</a>
           <a href="assignment.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Assignment</a>
           <a href="grade.html" class="nav_link"><i class="bx bx-bookmark nav_icon"></i>Grade</a>
         `;

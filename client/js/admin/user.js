@@ -8,7 +8,7 @@ const passwordInput = document.getElementById("password");
 const submitBtn = document.getElementById("submitBtn");
 const editIdInput = document.getElementById("editId");
 const updateformdoc = document.getElementById("userForm");
-const token = localStorage.getItem("token");
+const tokeVal = localStorage.getItem("token");
 
 // API Base URL
 const apiUrl = "http://localhost:9000/v1/users";
@@ -23,7 +23,7 @@ async function fetchUsers() {
     const response = await fetch(apiUrl, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
         "Content-Type": "application/json",
       },
     });
@@ -89,7 +89,7 @@ async function saveUser(event) {
     const response = await fetch(url, {
       method,
       headers: {
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
@@ -142,7 +142,7 @@ async function handleDelete(event) {
       const response = await fetch(`${apiUrl}/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${token}`, // Include the token
+          Authorization: `Bearer ${tokeVal}`, // Include the token
           "Content-Type": "application/json",
         },
       });

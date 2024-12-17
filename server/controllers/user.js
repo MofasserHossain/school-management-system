@@ -300,6 +300,7 @@ exports.deleteUserCourse = catchAsync(async (req, res) => {
 
 exports.getAllUserByCourseBatch = catchAsync(async (req, res) => {
   const { id } = req.params;
+  const { type } = req.query;
   const query = `
   SELECT 
     uc.user_id as user_id,
@@ -309,8 +310,10 @@ exports.getAllUserByCourseBatch = catchAsync(async (req, res) => {
     u.role as role,
     uc.type as type,
     uc.created_at as created_at
+    ${type === "grade" ? `, g.mark as mark` : ""}
    FROM user_courses as uc
     JOIN users as u ON uc.user_id = u.id
+    ${type === "grade" ? `LEFT JOIN grades as g ON u.id = g.student_id` : ""}
     WHERE uc.course_batch_id = ? and uc.type = 'student' order by created_at desc;
   `;
 

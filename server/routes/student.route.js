@@ -1,18 +1,15 @@
 const express = require("express");
 const {
-  createStudentCourse,
-  getStudentCourse,
-  getAllStudentCourses,
-  deleteStudentCourse,
-  updateStudentCourse,
+  getStudentAssignment,
+  submitStudentAssignment,
+  getStudentResults,
 } = require("../controllers/student");
 
 const router = express.Router();
 
-// router.get("/course", getAllStudentCourses);
-// router.post("/course", createStudentCourse);
-// router.get("/course/:id", getStudentCourse);
-// router.patch("/course/:id", updateStudentCourse);
-// router.delete("/course/:id", deleteStudentCourse);
+router.post("/submit-assignment", submitStudentAssignment);
+router.get("/assignment", getStudentAssignment);
+
+router.get("/grades/:studentId", getStudentResults);
 
 module.exports = router;

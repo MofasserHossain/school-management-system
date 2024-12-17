@@ -35,7 +35,7 @@ const defaultRoutes = [
     route: courseBatch,
   },
   {
-    path: "/students",
+    path: "/student",
     route: students,
   },
   {

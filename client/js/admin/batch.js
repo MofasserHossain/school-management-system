@@ -3,7 +3,7 @@ const batchTableBody = document.querySelector("#batchTable tbody");
 const batchNameInput = document.getElementById("batchName");
 const batchSubmitBtn = document.getElementById("batchSubmitBtn");
 const editBatchIdInput = document.getElementById("editBatchId");
-const token = localStorage.getItem("token");
+const tokeVal = localStorage.getItem("token");
 const hiddenButton = document.getElementById("batchCancelBtn");
 
 // API Base URL
@@ -22,7 +22,7 @@ async function fetchBatches() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
     });
     if (response.ok) {
@@ -80,7 +80,7 @@ async function saveBatch(event) {
       method,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
       body: JSON.stringify(batchData),
     });
@@ -103,7 +103,7 @@ async function handleBatchEdit(event) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
     });
     if (response.ok) {
@@ -129,7 +129,7 @@ async function handleBatchDelete(event) {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Include the token
+          Authorization: `Bearer ${tokeVal}`, // Include the token
         },
       });
       if (response.ok) {

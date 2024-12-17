@@ -1,22 +1,23 @@
 const button = document.getElementById("loginForm");
 const emailDoc = document.getElementById("email");
 const passwordDoc = document.getElementById("password");
+const alertDoc = document.getElementById("errorAlert");
 
 // Redirect to dashboard if token and role exist
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("user");
-
   const parseUser = JSON.parse(user);
-
   const decodeToken = atob(token.split(".")[1]);
   const parseToken = JSON.parse(decodeToken);
-  const role = parseToken.role;
-
+  const role = parseToken.type;
   console.log(parseUser.role, role, token, decodeToken, parseToken);
-
-  if (parseUser.role === role && token && role) {
-    window.location.href = "/admin/dashboard.html";
+  if (parseUser.role === role && token && role === "admin") {
+    window.location.href = "admin/dashboard.html";
+  } else if (parseUser.role === role && token && role === "teacher") {
+    window.location.href = "teacher/dashboard.html";
+  } else if (parseUser.role === role && token && role === "student") {
+    window.location.href = "student/dashboard.html";
   }
 });
 
@@ -29,12 +30,11 @@ button.addEventListener("submit", async function (e) {
   const password = passwordDoc.value;
 
   if (!email || !password) {
-    document.getElementById("errorAlert").innerText =
-      "Please provide email and password";
-    document.getElementById("errorAlert").classList.remove("d-none");
+    alertDoc.innerText = "Please provide email and password";
+    alertDoc.classList.remove("d-none");
   }
 
-  document.getElementById("errorAlert").classList.add("d-none");
+  alertDoc.classList.add("d-none");
   // API Endpoint
   const apiUrl = "http://localhost:9000/v1/auth/login";
 
@@ -69,15 +69,13 @@ button.addEventListener("submit", async function (e) {
       }
     } else {
       // Show error alert
-      document.getElementById("errorAlert").innerText =
-        data.message || "Login failed!";
-      document.getElementById("errorAlert").classList.remove("d-none");
+      alertDoc.innerText = data.message || "Login failed!";
+      alertDoc.classList.remove("d-none");
     }
   } catch (error) {
     console.error("Error:", error);
-    document.getElementById("errorAlert").innerText =
-      "An error occurred. Please try again.";
-    document.getElementById("errorAlert").classList.remove("d-none");
+    alertDoc.innerText = "An error occurred. Please try again.";
+    alertDoc.classList.remove("d-none");
   } finally {
     button.removeAttribute("disabled");
   }

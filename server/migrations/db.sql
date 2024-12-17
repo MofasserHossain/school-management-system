@@ -104,6 +104,7 @@ create table if not exists submissions (
     student_id int not null,
     link varchar(255) not null,
     course_batch_id int not null,
+    is_late boolean default false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY constraint_fk_submission_assignment_id (assignment_id) REFERENCES assignments(id) on delete cascade,
@@ -111,15 +112,16 @@ create table if not exists submissions (
     FOREIGN KEY constraint_fk_submission_course_batch (course_batch_id) REFERENCES course_batches(id) on delete cascade
 );
 
+-- alter table submissions add COLUMN is_late boolean not null;
+
 create table if not exists grades (
     id int AUTO_INCREMENT PRIMARY KEY,
-    assignment_id int not null,
     student_id int not null,
     mark int not null,
+    grade varchar(10) not null,
     course_batch_id int not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY constraint_fk_grade_assignment_id (assignment_id) REFERENCES assignments(id) on delete cascade,
     FOREIGN KEY constraint_fk_grade_student_id (student_id) REFERENCES users(id) on delete cascade,
     FOREIGN KEY constraint_fk_grade_course_batch (course_batch_id) REFERENCES course_batches(id) on delete cascade
 );

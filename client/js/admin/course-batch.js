@@ -8,7 +8,7 @@ const courseSelect = document.getElementById("courseSelect");
 const batchSelect = document.getElementById("batchSelect");
 const courseBatchSubmitBtn = document.getElementById("courseBatchSubmitBtn");
 const editCourseBatchIdInput = document.getElementById("editCourseBatchId");
-const token = localStorage.getItem("token");
+const tokeVal = localStorage.getItem("token");
 
 // API Base URLs
 const courseBatchApiUrl = "http://localhost:9000/v1/course-batches";
@@ -27,7 +27,7 @@ async function fetchCourseBatches() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
     });
     if (response.ok) {
@@ -49,7 +49,7 @@ async function fetchDropdownData() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
     };
     const [departments, courses, batches] = await Promise.all([
@@ -147,7 +147,7 @@ async function handleCourseBatchEdit(event) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the token
+        Authorization: `Bearer ${tokeVal}`, // Include the token
       },
     });
     if (response.ok) {
