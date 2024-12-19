@@ -9,8 +9,9 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 });
 
 async function fetchStudentCourses(role, callback) {
+  const user = JSON.parse(localStorage.getItem("user"));
   try {
-    const response = await fetch(`${apiURL}?role=${role}`, {
+    const response = await fetch(`${apiURL}?role=${role}&id=${user?.id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -18,9 +19,9 @@ async function fetchStudentCourses(role, callback) {
       },
     });
     const data = await response.json();
-    console.log(data);
-    const user = data?.data;
-    callback(user);
+    // console.log(data);
+    const userData = data?.data;
+    callback(userData);
   } catch (error) {
     console.error("Error fetching student courses", error);
   }
@@ -45,7 +46,11 @@ const renderTable = (courses) => {
 };
 
 // Call the function to fetch and display data when the page is ready
-document.addEventListener(
-  "DOMContentLoaded",
-  fetchStudentCourses("student", renderTable)
-);
+document.addEventListener("DOMContentLoaded", () => {
+  if (tokeVal) {
+    const decodeToken = atob(tokeVal.split(".")[1]);
+    const parseToken = JSON.parse(decodeToken);
+    const role = parseToken?.type;
+    fetchStudentCourses(role, renderTable);
+  }
+});

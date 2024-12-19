@@ -2,7 +2,7 @@ const { executeQuery } = require("../config/db-function");
 const catchAsync = require("../utils/cacheAsync");
 
 exports.getStudentAssignment = catchAsync(async (req, res) => {
-  const { course_batch_id, student_id } = req.query;
+  const { course_batch_id } = req.query;
   const query = `SELECT 
     a.id as id,
     a.title as title,
@@ -11,9 +11,9 @@ exports.getStudentAssignment = catchAsync(async (req, res) => {
     a.mark as mark,
     s.link as link,
     s.is_late as late
-  FROM assignments as a left join submissions as s on a.id = s.assignment_id where a.student_id = ? and a.course_batch_id = ? order by a.created_at desc`;
+  FROM assignments as a left join submissions as s on a.id = s.assignment_id where a.course_batch_id = ? order by a.created_at desc`;
 
-  executeQuery(query, [student_id, course_batch_id], (error, results) => {
+  executeQuery(query, [course_batch_id], (error, results) => {
     console.log("error", error);
     if (error) {
       return res.status(500).json({

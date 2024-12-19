@@ -83,14 +83,12 @@ create table if not exists assignments (
     title varchar(255) not null,
     description varchar(255),
     teacher_id int not null,
-    student_id int not null,
     course_batch_id int not null,
     due_date TIMESTAMP not null,
     mark int default 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY constraint_fk_assignment_course_batch (course_batch_id) REFERENCES course_batches(id) on delete cascade,
-    FOREIGN KEY constraint_fk_assignment_student (student_id) REFERENCES users(id) on delete cascade,
     FOREIGN KEY constraint_fk_assignment_teacher (teacher_id) REFERENCES users(id) on delete cascade
 );
 
@@ -127,7 +125,7 @@ create table if not exists grades (
 );
 
 
-insert into users (first_name, last_name, email, password, role) values ('admin', 'admin', 'admin@gmail.com', '123456', "admin");
+insert into users (first_name, last_name, email, password, role) values ('admin', 'admin', 'admin@gmail.com', '$2a$08$3TAEflM4zF9SNyt5mK.ua.EB3IOjQ9Mp3o/CTUI/qQvnh91yotWTG', "admin");
 
 -- -- insert data 
 -- insert into departments (name, alias) values ('Computer Science and Engineering', 'CSE');

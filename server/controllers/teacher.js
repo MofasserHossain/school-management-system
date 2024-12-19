@@ -151,7 +151,7 @@ exports.deleteTeacherAttendance = catchAsync(async (req, res) => {
 
 exports.getAllTeacherAssignments = catchAsync(async (req, res) => {
   const { course_batch_id } = req.query;
-  const query = `SELECT * FROM assignments where course_batch_id= ? order by created_at desc`;
+  const query = `SELECT * FROM assignments where course_batch_id= ? group by course_batch_id order by created_at desc`;
 
   executeQuery(query, [course_batch_id], (error, results) => {
     if (error) {
@@ -186,52 +186,55 @@ exports.createTeacherAssignment = catchAsync(async (req, res) => {
     });
   }
 
-  const query =
-    "SELECT * FROM user_courses where course_batch_id = ? and type = 'student'";
+  // const query =
+  //   "SELECT * FROM user_courses where course_batch_id = ? and type = 'student'";
 
-  executeQuery(query, [course_batch_id], (error, results) => {
-    console.log("error", error);
-    if (error) {
-      return res.status(500).json({
-        status: "fail",
-        message: "Internal server error",
-      });
-    }
+  // executeQuery(query, [course_batch_id], (error, results) => {
+  //   console.log("error", error);
+  //   if (error) {
+  //     return res.status(500).json({
+  //       status: "fail",
+  //       message: "Internal server error",
+  //     });
+  //   }
 
-    if (results.length === 0) {
-      return res.status(404).json({
-        status: "fail",
-        message: "Course batch not found",
-      });
-    }
-    // console.log("results", results);
+  //   if (results.length === 0) {
+  //     return res.status(404).json({
+  //       status: "fail",
+  //       message: "Course batch not found",
+  //     });
+  //   }
+  //   // console.log("results", results);
 
-    const payload = results?.map((result) => {
-      return {
-        user_id: result.user_id,
-        course_batch_id: course_batch_id,
-        date: due_date,
-        description: description,
-        due_date: due_date,
-        mark: mark,
-        teacher_id: teacher_id,
-        title: title,
-      };
-    });
+  //   const payload = results?.map((result) => {
+  //     return {
+  //       user_id: result.user_id,
+  //       course_batch_id: course_batch_id,
+  //       date: due_date,
+  //       description: description,
+  //       due_date: due_date,
+  //       mark: mark,
+  //       teacher_id: teacher_id,
+  //       title: title,
+  //     };
+  //   });
 
-    const query = `INSERT INTO assignments (student_id, course_batch_id, description, due_date, mark, teacher_id, title)
-    VALUES ?`;
-    const values = payload.map((data) => [
-      data.user_id,
-      data.course_batch_id * 1,
-      data.description,
-      data.due_date,
-      data.mark,
-      data.teacher_id,
-      data.title,
-    ]);
-    // console.log("values", values);
-    executeQuery(query, [values], (error, results) => {
+  const query = `INSERT INTO assignments (course_batch_id, description, due_date, mark, teacher_id, title)
+    VALUES (? , ? , ? , ? , ? , ? )`;
+  // const values = payload.map((data) => [
+  //   data.user_id,
+  //   data.course_batch_id * 1,
+  //   data.description,
+  //   data.due_date,
+  //   data.mark,
+  //   data.teacher_id,
+  //   data.title,
+  // ]);
+  // console.log("values", values);
+  executeQuery(
+    query,
+    [course_batch_id, description, due_date, mark, teacher_id, title],
+    (error, results) => {
       console.log("error", error);
       if (error) {
         return res.status(500).json({
@@ -244,8 +247,9 @@ exports.createTeacherAssignment = catchAsync(async (req, res) => {
         message: "Assignment records created successfully",
         affectedRows: results.affectedRows, // Check how many rows were inserted
       });
-    });
-  });
+    }
+  );
+  // });
 });
 
 exports.getTeacherAssignment = catchAsync(async (req, res) => {
@@ -331,6 +335,8 @@ exports.getSubmissions = catchAsync(async (req, res) => {
     JOIN users u ON s.student_id = u.id
     WHERE s.assignment_id = ? AND s.course_batch_id = ?
   `;
+
+  console.log("query", query);
 
   executeQuery(query, [assignmentId, course_batch_id], (error, results) => {
     console.log("error", error);

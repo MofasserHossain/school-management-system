@@ -6,14 +6,18 @@ const courseBatchSelect = document.getElementById("courseBatchSelect");
 const API_BASE = "http://localhost:9000/v1"; // Replace with your actual API base URL
 // Fetch the list of courses for a given role
 async function fetchStudentCourses(role, callback) {
+  const user = JSON.parse(localStorage.getItem("user"));
   try {
-    const response = await fetch(`${API_BASE}/users/course-user?role=${role}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${tokenValue}`,
-      },
-    });
+    const response = await fetch(
+      `${API_BASE}/users/course-user?role=${role}&id=${user?.id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${tokenValue}`,
+        },
+      }
+    );
     const data = await response.json();
     const courses = data?.data; // Assuming the response has 'data' property with courses
     callback(courses);
@@ -47,7 +51,7 @@ async function fetchStudentsByCourseBatch(courseBatchId, callback) {
 function renderCourses(courses) {
   courses.forEach((course) => {
     const option = document.createElement("option");
-    option.value = course.id;
+    option.value = course.course_batch_id;
     option.textContent = `${course.course_name}-${course?.batch_name}-${course.section}`;
     courseBatchSelect.appendChild(option);
   });
@@ -103,15 +107,16 @@ async function submitAttendance(event) {
     });
 
     const data = await response.json();
+
+    console.log("Attendance response", data);
     if (response.ok) {
-      alert("Attendance submitted successfully");
-      if (data.success) {
+      if (data.status === "success") {
         alert("Attendance submitted successfully");
       } else {
-        alert("Error submitting attendance");
+        alert(data?.message || "Error submitting attendance");
       }
     } else {
-      alert("Error submitting attendance");
+      alert(data?.message || "Error submitting attendance");
     }
     // console.log("Attendance response", data);
     // if (data.success) {
@@ -146,6 +151,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.location.href = "/projects/client/login.html";
     return;
   }
+  const decodeToken = atob(tokenValue.split(".")[1]);
+  const parseToken = JSON.parse(decodeToken);
+  const role = parseToken?.type;
   // Load available courses when the page loads (assuming role is 'student')
-  fetchStudentCourses("student", renderCourses);
+  fetchStudentCourses(role, renderCourses);
 });

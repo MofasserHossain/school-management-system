@@ -203,7 +203,7 @@ exports.getAllUserCourses = catchAsync(async (req, res) => {
 });
 
 exports.getAllUserCoursesV2 = catchAsync(async (req, res) => {
-  const { type } = req.query;
+  const { role, id } = req.query;
   // console.log({ type });
   const query = `
       SELECT
@@ -212,6 +212,7 @@ exports.getAllUserCoursesV2 = catchAsync(async (req, res) => {
           c.credits AS course_credits,
           cb.term AS semester,
           cb.section AS section,
+          cb.id AS course_batch_id,
           b.name AS batch_name,
           d.alias AS department_name
       FROM 
@@ -224,8 +225,10 @@ exports.getAllUserCoursesV2 = catchAsync(async (req, res) => {
           batches as b ON cb.batch_id = b.id
       JOIN 
           departments as d ON c.department_id = d.id
-      ${type ? `WHERE uc.type = '${type}'` : ""}
+      ${role && id ? `WHERE uc.type = '${role}' and uc.user_id = ${id}` : ""}
               `;
+
+  console.log(query);
 
   executeQuery(query, [], (err, results) => {
     if (err) {
@@ -300,7 +303,7 @@ exports.deleteUserCourse = catchAsync(async (req, res) => {
 
 exports.getAllUserByCourseBatch = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { type } = req.query;
+  const { type, role = "student" } = req.query;
   const query = `
   SELECT 
     uc.user_id as user_id,
@@ -311,13 +314,20 @@ exports.getAllUserByCourseBatch = catchAsync(async (req, res) => {
     uc.type as type,
     uc.created_at as created_at
     ${type === "grade" ? `, g.mark as mark` : ""}
-   FROM user_courses as uc
+    FROM user_courses as uc
     JOIN users as u ON uc.user_id = u.id
-    ${type === "grade" ? `LEFT JOIN grades as g ON u.id = g.student_id` : ""}
-    WHERE uc.course_batch_id = ? and uc.type = 'student' order by created_at desc;
+    ${
+      type === "grade"
+        ? `LEFT JOIN grades as g ON u.id = g.student_id AND g.course_batch_id = uc.course_batch_id`
+        : ""
+    }
+    WHERE uc.course_batch_id = ? and uc.type = ? 
+    order by created_at desc;
   `;
 
-  executeQuery(query, [id], (err, results) => {
+  console.log(query);
+
+  executeQuery(query, [id, role], (err, results) => {
     console.log(err, results);
     if (err)
       return res

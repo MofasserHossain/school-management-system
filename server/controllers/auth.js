@@ -83,7 +83,7 @@ exports.register = catchAsync(async (req, res) => {
     });
   }
 
-  if (role !== "student" && role !== "teacher") {
+  if (role !== "student" && role !== "teacher" && role !== "admin") {
     return res.status(400).json({
       status: "fail",
       message: "Invalid role",
