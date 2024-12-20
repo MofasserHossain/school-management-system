@@ -61,7 +61,7 @@ button.addEventListener("submit", async function (e) {
       localStorage.setItem("user", JSON.stringify(data.user));
       // Redirect to dashboard
       if (data.user.role === "admin") {
-        window.location.href = "admin/department.html";
+        window.location.href = "admin/user.html";
       } else if (data.user.role === "teacher") {
         window.location.href = "teacher/dashboard.html";
       } else {
