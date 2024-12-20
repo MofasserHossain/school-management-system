@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const role = parseToken.type;
   console.log(parseUser.role, role, token, decodeToken, parseToken);
   if (parseUser.role === role && token && role === "admin") {
-    window.location.href = "admin/dashboard.html";
+    window.location.href = "admin/user.html";
   } else if (parseUser.role === role && token && role === "teacher") {
     window.location.href = "teacher/dashboard.html";
   } else if (parseUser.role === role && token && role === "student") {
